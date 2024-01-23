@@ -1,0 +1,2 @@
+rootProject.name = 'spring-security-auth-example'
+include 'auth-mvc-session'
