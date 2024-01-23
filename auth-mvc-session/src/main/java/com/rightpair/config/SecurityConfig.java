@@ -22,6 +22,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(configurer -> configurer.loginPage("/login-form")
                         .defaultSuccessUrl("/", true)
@@ -31,12 +32,12 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID"))
                 .exceptionHandling(configurer -> configurer
                         .authenticationEntryPoint(appAuthenticationEntryPoint)
-                        .accessDeniedPage("/404"));
+                        .accessDeniedPage("/errors/403"));
 
         httpSecurity.authorizeHttpRequests(registry ->
                 registry.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
         );
 
         return httpSecurity.getOrBuild();

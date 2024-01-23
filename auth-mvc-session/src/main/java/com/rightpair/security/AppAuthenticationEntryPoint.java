@@ -16,6 +16,6 @@ public class AppAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         log.error("Authentication Error([{}]{}) : {}", request.getMethod(), request.getRequestURL(), authException.getMessage());
-        response.sendRedirect("/403");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
