@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout}"
+      layout:fragment="Content"
+>
+<head>
+    <title>Internal Server Error</title>
+</head>
+<body>
+<h1 class="text-3xl font-bold underline">
+    500 Internal Server Error
+</h1>
+<p>
+    서버 내부 오류입니다.
+    <hr/>
+    <p th:text="${message}"></p>
+</p>
+</body>
+</html>
