@@ -8,10 +8,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,6 +27,20 @@ public class UsersController {
         return "signup-form";
     }
 
+    @GetMapping("/info/me")
+    public String infoPage(@AuthenticationPrincipal AppUserDetails appUserDetails, Model model) {
+        Users users = usersService.getById(appUserDetails.getId());
+        model.addAttribute("user", users);
+        return "user-info";
+    }
+
+    @GetMapping("/update")
+    public String updatePage(@AuthenticationPrincipal AppUserDetails appUserDetails, Model model) {
+        Users users = usersService.getById(appUserDetails.getId());
+        model.addAttribute("user", users);
+        return "user-update";
+    }
+
     @PostMapping("/signup")
     public String signUp(@ModelAttribute("user")Users users, BindingResult result) {
         if (result.hasErrors()) {
@@ -39,16 +50,20 @@ public class UsersController {
         return "redirect:/users/login";
     }
 
-    @GetMapping("/info/me")
-    public String read(@AuthenticationPrincipal AppUserDetails appUserDetails, Model model) {
-        Users users = usersService.getById(appUserDetails.getId());
-        model.addAttribute("user", users);
-        return "user-info";
-    }
-
     @PostMapping("/info/me/delete")
     public String delete(@AuthenticationPrincipal AppUserDetails appUserDetails) {
         usersService.delete(appUserDetails.getId());
         return "redirect:/logout";
+    }
+
+    @PostMapping("/update")
+    public String update(
+            @AuthenticationPrincipal AppUserDetails appUserDetails,
+            @ModelAttribute("user")Users users, BindingResult result) {
+        if (result.hasErrors()) {
+            return "update";
+        }
+        usersService.updateNickName(appUserDetails.getId(), users);
+        return "redirect:/users/info/me";
     }
 }

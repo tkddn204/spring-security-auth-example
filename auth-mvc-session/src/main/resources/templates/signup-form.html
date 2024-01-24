@@ -12,7 +12,7 @@
         <div class="mt-10">
             <form th:action="@{/users/signup}" th:object="${user}" method="post">
                 <div class="flex flex-col mb-5">
-                    <label for="email" class="mb-1 text-xs tracking-wide text-gray-600">E-Mail Address:</label>
+                    <label for="email" class="mb-1 text-xs tracking-wide text-gray-600">이메일:</label>
                     <div class="relative">
                         <div class=" inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400 ">
                             <i class="fas fa-at text-blue-500"></i>
@@ -24,7 +24,7 @@
                     </ul>
                 </div>
                 <div class="flex flex-col mb-6">
-                    <label for="password" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">Password:</label>
+                    <label for="password" class="mb-1 text-xs sm:text-sm tracking-wide text-gray-600">비밀번호:</label>
                     <div class="relative">
                         <div class=" inline-flex items-center justify-center absolute left-0 top-0 h-full w-10 text-gray-400 ">
 							<span>
@@ -58,9 +58,9 @@
         </div>
     </div>
     <div class="flex justify-center items-center mt-6">
-        <a href="#" target="_blank" class=" inline-flex items-center text-gray-700 font-medium text-xs text-center ">
-            <span class="ml-2">You have an account? <a href="#" class="text-xs ml-2 text-blue-500 font-semibold">Login here</a></span>
-        </a>
+        <div href="#" target="_blank" class=" inline-flex items-center text-gray-700 font-medium text-xs text-center ">
+            <span class="ml-2">이미 계정이 있나요? <a href="@{/users/login}" class="text-xs ml-2 text-blue-500 font-semibold">로그인하러 가기</a></span>
+        </div>
     </div>
 </div>
 </body>
