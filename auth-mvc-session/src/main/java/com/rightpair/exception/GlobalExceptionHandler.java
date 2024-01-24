@@ -13,13 +13,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ModelAndView handleNoResourceFoundException(NoResourceFoundException exception) {
-        return new ModelAndView("/errors/404", HttpStatus.NOT_FOUND);
+        return new ModelAndView("/error/404", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
     public ModelAndView handleExceptions(Exception exception) {
         log.error(exception.getMessage(), exception);
-        return new ModelAndView("/errors/500", HttpStatus.INTERNAL_SERVER_ERROR)
+        return new ModelAndView("/error/500", HttpStatus.INTERNAL_SERVER_ERROR)
                 .addObject("message", exception.getMessage());
     }
 }

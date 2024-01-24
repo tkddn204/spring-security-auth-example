@@ -1,6 +1,6 @@
 package com.rightpair.config;
 
-import com.rightpair.security.AppAuthenticationEntryPoint;
+import com.rightpair.security.AppUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -17,27 +17,25 @@ import org.springframework.web.cors.CorsUtils;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private final AppAuthenticationEntryPoint appAuthenticationEntryPoint;
-
+    private final AppUserDetailsService appUserDetailsService;
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
-                .formLogin(configurer -> configurer.loginPage("/login-form")
-                        .defaultSuccessUrl("/", true)
-                        .failureUrl("/login-form?error=true")
+                .formLogin(configurer -> configurer.loginPage("/users/login")
+                        .failureUrl("/users/login?error")
                         .permitAll())
-                .logout(configurer -> configurer.logoutSuccessUrl("/logout")
-                        .deleteCookies("JSESSIONID"))
-                .exceptionHandling(configurer -> configurer
-                        .authenticationEntryPoint(appAuthenticationEntryPoint)
-                        .accessDeniedPage("/errors/403"));
+                .userDetailsService(appUserDetailsService)
+                .logout(configurer -> configurer.logoutSuccessUrl("/users/login?logout")
+                        .deleteCookies("JSESSIONID"));
 
         httpSecurity.authorizeHttpRequests(registry ->
                 registry.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/", "/error").permitAll()
+                        .requestMatchers("/users/login", "/users/signup").permitAll()
+                        .anyRequest().authenticated()
         );
 
         return httpSecurity.getOrBuild();

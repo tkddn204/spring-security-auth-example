@@ -11,8 +11,4 @@ public class MainController {
         return "index";
     }
 
-    @GetMapping("/login-form")
-    public String loginPage() {
-        return "login-form";
-    }
 }

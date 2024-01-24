@@ -29,7 +29,7 @@ public class AppUserDetails implements UserDetails {
         this.password = users.getPassword();
         this.enabled = users.getState().equals(UsersStateType.ACTIVE);
         this.authorities = AuthorityUtils.createAuthorityList(
-                users.getRoles().stream()
+                users.getUserRoles().stream()
                         .map(usersRole -> usersRole.getRoles().getRolesType().getValue())
                         .toList());
     }

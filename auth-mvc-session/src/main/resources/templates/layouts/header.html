@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml"
       th:fragment="HeaderFragment">
 <header class="flex items-center justify-between flex-wrap bg-teal p-6">
     <div class="flex items-center flex-no-shrink text-white mr-6">
@@ -15,17 +16,25 @@
     <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
         <nav class="text-sm lg:flex-grow">
             <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-teal-lighter hover:text-white mr-4">
-                Docs
+                1
             </a>
             <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-teal-lighter hover:text-white mr-4">
-                Examples
+                2
             </a>
             <a href="#responsive-header" class="block mt-4 lg:inline-block lg:mt-0 text-teal-lighter hover:text-white">
-                Blog
+                3
             </a>
         </nav>
-        <div>
-            내 정보
+        <div class="navbar-form navbar-right" sec:authorize="isAuthenticated()">
+            <form th:action="@{/logout}" method="post">
+                안녕하세요, <a th:href="@{/users/info/me}">
+                <span sec:authentication="principal.nickname">닉네임</span></a>님!
+                <button type="submit" class="btn btn-default">로그아웃</button>
+            </form>
+        </div>
+
+        <div class="navbar-form navbar-right" sec:authorize="!isAuthenticated()">
+            <a th:href="@{/login}" class="btn btn-default">로그인</a>
         </div>
     </div>
 </header>
