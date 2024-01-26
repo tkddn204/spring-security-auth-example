@@ -1,8 +1,8 @@
 package com.rightpair.controller;
 
 import com.rightpair.common.MockMvcUnitTest;
+import com.rightpair.common.UsersUtil;
 import com.rightpair.entity.Users;
-import com.rightpair.security.AppUserDetails;
 import com.rightpair.security.WithMockAppUser;
 import com.rightpair.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -64,7 +63,7 @@ class UsersControllerTest extends MockMvcUnitTest {
         @WithMockAppUser
         void infoMePage_success() throws Exception {
             // given
-            Users users = getMockedUser();
+            Users users = UsersUtil.getMockedUsersFromSecurityContext();
             given(usersService.getById(anyLong())).willReturn(users);
 
             // when
@@ -82,7 +81,7 @@ class UsersControllerTest extends MockMvcUnitTest {
         @WithMockAppUser
         void updatePage_success() throws Exception {
             // given
-            Users users = getMockedUser();
+            Users users = UsersUtil.getMockedUsersFromSecurityContext();
             given(usersService.getById(anyLong())).willReturn(users);
 
             // when
@@ -93,18 +92,6 @@ class UsersControllerTest extends MockMvcUnitTest {
                     .andExpect(model().attribute("user", instanceOf(Users.class)));
             String content = actions.andReturn().getResponse().getContentAsString();
             assertThat(content.contains("수정")).isTrue();
-        }
-
-        private Users getMockedUser() {
-            if (SecurityContextHolder.getContext() == null) {
-                throw new IllegalArgumentException("@WithMockAppUser 어노테이션을 달아야 합니다.");
-            }
-            AppUserDetails appUserDetails = (AppUserDetails) SecurityContextHolder.getContext()
-                    .getAuthentication().getPrincipal();
-            Users users = new Users(appUserDetails.getNickname(),
-                    appUserDetails.getUsername(), appUserDetails.getPassword());
-            users.setId(1000L);
-            return users;
         }
     }
 }
