@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'jacoco'
     id 'org.springframework.boot' version '3.2.2'
     id 'io.spring.dependency-management' version '1.1.4'
 }
@@ -22,6 +23,7 @@ allprojects {
 
 subprojects {
     apply plugin: 'java'
+    apply plugin: 'jacoco'
     apply plugin: 'org.springframework.boot'
     apply plugin: 'io.spring.dependency-management'
 
@@ -29,6 +31,14 @@ subprojects {
         compileOnly {
             extendsFrom annotationProcessor
         }
+    }
+
+    jacoco {
+        toolVersion "0.8.11"
+    }
+
+    repositories {
+        mavenCentral()
     }
 
     dependencies {
@@ -39,8 +49,66 @@ subprojects {
         testAnnotationProcessor 'org.projectlombok:lombok'
     }
 
-    tasks.named('test') {
+    test {
         systemProperty "spring.profiles.active", "test"
         useJUnitPlatform()
+        finalizedBy 'jacocoTestReport'
+    }
+
+    // ref: https://github.com/depromeet/na-lab-server/blob/main/gradle/jacoco.gradle
+    var excludeFromCoverage = new ArrayList<String>()
+    file('coverage-exclude.luffy').withInputStream(){
+        is -> excludeFromCoverage.addAll(new BufferedReader(new InputStreamReader(is))
+                .lines()
+                .parallel()
+                .map(s -> s.substring(7).strip())
+                .toList())
+    }
+
+    jacocoTestReport {
+
+        reports {
+            html.destination file("jacoco/jacoco.html")
+        }
+
+        afterEvaluate {
+            classDirectories.setFrom(files(classDirectories.files.collect {
+                fileTree(dir: it, exclude: excludeFromCoverage.stream()
+                        .map(s -> s + ".class")
+                        .toList())
+            }))
+        }
+
+        finalizedBy 'jacocoTestCoverageVerification'
+    }
+
+    jacocoTestCoverageVerification {
+        violationRules {
+//            rule {
+//                limit {
+//                    minimum = 0.30
+//                }
+//            }
+
+            rule {
+                enabled = false
+                element = 'CLASS'
+                limit {
+                    counter = 'BRANCH'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.70
+                }
+
+                limit {
+                    counter = 'LINE'
+                    value = 'COVEREDRATIO'
+                    minimum = 0.70
+                }
+
+                excludes = excludeFromCoverage.stream()
+                    .map(s -> s.replace("/", "."))
+                    .toList()
+            }
+        }
     }
 }
