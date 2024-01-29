@@ -18,7 +18,7 @@ class UserUpdateEventListenerTest {
     private ApplicationEventPublisher eventPublisher;
 
     @Test
-    void shouldUpdateSecurityContextWhenUserUpdateEventIsPublished() {
+    void updateSecurityContextWhenUserUpdateEventIsPublished_success() {
         // given
         Users updatedUser = new Users("updatedUser", "test@test.com", "test1234");
         UserUpdateEvent event = new UserUpdateEvent(this, updatedUser);
