@@ -8,9 +8,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.session.data.redis.RedisIndexedSessionRepository;
+import org.springframework.session.security.SpringSessionBackedSessionRegistry;
 import org.springframework.web.cors.CorsUtils;
 
 @Configuration
@@ -18,6 +22,8 @@ import org.springframework.web.cors.CorsUtils;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final AppUserDetailsService appUserDetailsService;
+    private final RedisIndexedSessionRepository redisIndexedSessionRepository;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
@@ -28,7 +34,11 @@ public class SecurityConfig {
                         .permitAll())
                 .userDetailsService(appUserDetailsService)
                 .logout(configurer -> configurer.logoutSuccessUrl("/users/login?logout")
-                        .deleteCookies("JSESSIONID"));
+                        .deleteCookies("JSESSIONID"))
+                .sessionManagement(configurer -> configurer.sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::changeSessionId)
+                        .maximumSessions(100)
+                        .maxSessionsPreventsLogin(false)
+                        .sessionRegistry(springSessionBackedSessionRegistry()));
 
         httpSecurity.authorizeHttpRequests(registry ->
                 registry.requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
@@ -39,6 +49,11 @@ public class SecurityConfig {
         );
 
         return httpSecurity.getOrBuild();
+    }
+
+    @Bean
+    public SessionRegistry springSessionBackedSessionRegistry() {
+        return new SpringSessionBackedSessionRegistry<>(redisIndexedSessionRepository);
     }
 
     @Bean
