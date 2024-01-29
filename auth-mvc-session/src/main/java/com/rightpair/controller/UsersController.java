@@ -3,6 +3,7 @@ package com.rightpair.controller;
 import com.rightpair.entity.Users;
 import com.rightpair.security.AppUserDetails;
 import com.rightpair.service.UsersService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -42,9 +43,9 @@ public class UsersController {
     }
 
     @PostMapping("/signup")
-    public String signUp(@ModelAttribute("user")Users users, BindingResult result) {
+    public String signUp(@Valid @ModelAttribute("user")Users users, BindingResult result) {
         if (result.hasErrors()) {
-            return "signup-form";
+            return "redirect:/users/signup";
         }
         usersService.create(users);
         return "redirect:/users/login";
@@ -53,15 +54,15 @@ public class UsersController {
     @PostMapping("/info/me/delete")
     public String delete(@AuthenticationPrincipal AppUserDetails appUserDetails) {
         usersService.delete(appUserDetails.getId());
-        return "redirect:/logout";
+        return "redirect:/users/logout";
     }
 
     @PostMapping("/update")
     public String update(
             @AuthenticationPrincipal AppUserDetails appUserDetails,
-            @ModelAttribute("user")Users users, BindingResult result) {
+            @Valid @ModelAttribute("user")Users users, BindingResult result) {
         if (result.hasErrors()) {
-            return "update";
+            return "redirect:/users/update";
         }
         usersService.updateNickName(appUserDetails.getId(), users);
         return "redirect:/users/info/me";
