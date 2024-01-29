@@ -3,3 +3,4 @@ exclude com/rightpair/entity/*
 exclude com/rightpair/entity/**/*
 exclude com/rightpair/exception/*
 exclude com/rightpair/dto/*
+exclude com/rightpair/*
