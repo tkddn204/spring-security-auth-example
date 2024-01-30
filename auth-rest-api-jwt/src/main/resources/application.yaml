@@ -1,6 +1,8 @@
 spring:
   application:
     name: auth-jwt
+  config:
+    import: optional:file:.env[.properties]
 
   datasource:
     driver-class-name: org.h2.Driver
@@ -14,3 +16,9 @@ spring:
       dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: create
+
+service:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY}
+    access-expiration: ${JWT_ACCESS_EXPIRATION}
+    refresh-expiration: ${JWT_REFRESH_EXPIRATION}

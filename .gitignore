@@ -43,3 +43,6 @@ bin/
 
 ### Jacoco ###
 **/jacoco
+
+### Private Files ###
+.env
