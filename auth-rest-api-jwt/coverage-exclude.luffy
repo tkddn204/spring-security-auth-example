@@ -1,6 +1,11 @@
-exclude com/rightpair/config/*
-exclude com/rightpair/entity/*
-exclude com/rightpair/entity/**/*
-exclude com/rightpair/exception/*
-exclude com/rightpair/dto/*
+exclude com/rightpair/global/common/*
+exclude com/rightpair/global/config/*
+exclude com/rightpair/global/**/entity/*
+exclude com/rightpair/global/**/entity/**/*
+exclude com/rightpair/global/**/dto/*
+exclude com/rightpair/domain/**/entity/*
+exclude com/rightpair/domain/**/entity/**/*
+exclude com/rightpair/**/exception/*
+exclude com/rightpair/**/exception/**/*
+exclude com/rightpair/domain/**/dto/**/*
 exclude com/rightpair/*
