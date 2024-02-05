@@ -29,7 +29,7 @@ public class AuthUserDetails implements UserDetails {
 
     public static AuthUserDetails from(User user) {
         List<String> roles = user.getUserRoles().stream()
-                .map(memberRole -> memberRole.getRole().getRolesType().getValue())
+                .map(memberRole -> memberRole.getRole().getRoleType().getValue())
                 .toList();
         return new AuthUserDetails(
                 user.getId(),

@@ -5,7 +5,7 @@ import com.rightpair.domain.users.dto.request.UserRegisterRequest;
 import com.rightpair.domain.users.dto.response.UserLoginResponse;
 import com.rightpair.domain.users.entity.Role;
 import com.rightpair.domain.users.entity.User;
-import com.rightpair.domain.users.entity.types.RolesType;
+import com.rightpair.domain.users.entity.types.RoleType;
 import com.rightpair.domain.users.exception.UserAlreadyExistedException;
 import com.rightpair.domain.users.exception.UserNotFoundException;
 import com.rightpair.domain.users.exception.UserRoleNotFoundException;
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-public class UsersService {
+public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -46,7 +46,7 @@ public class UsersService {
     @Transactional
     public void register(UserRegisterRequest registerRequest) {
         validateMemberEmail(registerRequest.email());
-        Role role = roleRepository.findByRolesType(RolesType.ASSOCIATE_USER).orElseThrow(UserRoleNotFoundException::new);
+        Role role = roleRepository.findByRolesType(RoleType.ASSOCIATE_USER).orElseThrow(UserRoleNotFoundException::new);
         userRepository.save(
                 new User(registerRequest.email(),
                         passwordEncoder.encode(registerRequest.password()),

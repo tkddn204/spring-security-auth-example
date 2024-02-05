@@ -1,6 +1,6 @@
 package com.rightpair.domain.users.entity;
 
-import com.rightpair.domain.users.entity.types.RolesType;
+import com.rightpair.domain.users.entity.types.RoleType;
 import com.rightpair.domain.users.entity.types.UserStateType;
 import com.rightpair.global.common.BaseEntity;
 import jakarta.persistence.*;
@@ -43,7 +43,7 @@ public class User extends BaseEntity {
     private final Set<UserRole> userRoles = new HashSet<>();
 
     public User(String nickname, String email, String password) {
-        this(nickname, email, password, new Role(RolesType.ASSOCIATE_USER));
+        this(nickname, email, password, new Role(RoleType.ASSOCIATE_USER));
     }
 
     public User(String nickname, String email, String password, Role userRole) {
@@ -63,7 +63,7 @@ public class User extends BaseEntity {
     }
 
     public User newFaceUser() {
-        this.userRoles.add(new UserRole(this, new Role(RolesType.ASSOCIATE_USER)));
+        this.userRoles.add(new UserRole(this, new Role(RoleType.ASSOCIATE_USER)));
         return this;
     }
 
