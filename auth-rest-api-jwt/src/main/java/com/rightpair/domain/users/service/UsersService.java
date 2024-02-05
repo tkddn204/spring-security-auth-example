@@ -1,7 +1,6 @@
 package com.rightpair.domain.users.service;
 
 import com.rightpair.domain.users.dto.request.UserAuthenticateRequest;
-import com.rightpair.domain.users.dto.request.UserRegisterEmailCheckRequest;
 import com.rightpair.domain.users.dto.request.UserRegisterRequest;
 import com.rightpair.domain.users.dto.response.UserLoginResponse;
 import com.rightpair.domain.users.entity.Role;
@@ -54,11 +53,6 @@ public class UsersService {
                         registerRequest.name(),
                         role)
         );
-    }
-
-    @Transactional(readOnly = true)
-    public void emailCheck(UserRegisterEmailCheckRequest emailCheckRequest) {
-        validateMemberEmail(emailCheckRequest.email());
     }
 
     public void logout(String email, String accessToken) {
