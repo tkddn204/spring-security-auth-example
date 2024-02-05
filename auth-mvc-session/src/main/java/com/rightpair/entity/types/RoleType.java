@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum RolesType {
+public enum RoleType {
     ASSOCIATE_USER("ROLE_ASSOCIATE_USER"),
     REGULAR_USER("ROLE_REGULAR_USER"),
     ADMIN("ROLE_ADMIN");

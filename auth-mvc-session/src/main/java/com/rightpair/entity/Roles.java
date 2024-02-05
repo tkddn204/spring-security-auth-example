@@ -1,6 +1,6 @@
 package com.rightpair.entity;
 
-import com.rightpair.entity.types.RolesType;
+import com.rightpair.entity.types.RoleType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,12 +20,12 @@ public class Roles {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_type", nullable = false)
-    private RolesType rolesType;
+    private RoleType roleType;
 
     @OneToMany(mappedBy = "roles", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private final List<UsersRole> memberRoles = new ArrayList<>();
 
-    public Roles(RolesType rolesType) {
-        this.rolesType = rolesType;
+    public Roles(RoleType roleType) {
+        this.roleType = roleType;
     }
 }

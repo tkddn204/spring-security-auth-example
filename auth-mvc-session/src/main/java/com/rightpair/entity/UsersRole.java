@@ -14,15 +14,15 @@ public class UsersRole {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId("usersId")
-    private Users users;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @MapsId("rolesId")
     private Roles roles;
 
-    public UsersRole(Users users, Roles roles) {
-        this.usersRoleId = new UsersRoleId(users.getId(), roles.getId());
-        this.users = users;
+    public UsersRole(User user, Roles roles) {
+        this.usersRoleId = new UsersRoleId(user.getId(), roles.getId());
+        this.user = user;
         this.roles = roles;
     }
 

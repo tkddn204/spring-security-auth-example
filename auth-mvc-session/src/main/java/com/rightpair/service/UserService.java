@@ -1,12 +1,12 @@
 package com.rightpair.service;
 
-import com.rightpair.entity.Users;
+import com.rightpair.entity.User;
 import com.rightpair.entity.types.UsersStateType;
 import com.rightpair.event.UserUpdateEvent;
 import com.rightpair.exception.AlreadySignedUserException;
 import com.rightpair.exception.NullReferenceEntityException;
 import com.rightpair.exception.UserNotFoundException;
-import com.rightpair.repository.UsersRepository;
+import com.rightpair.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,44 +17,44 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UsersService {
+public class UserService {
 
-    private final UsersRepository usersRepository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Transactional(readOnly = true)
-    public Users getById(Long userId) {
-        return usersRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+    public User getById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
     @Transactional
-    public void create(Users users) {
-        if (users == null) {
-            throw new NullReferenceEntityException(Users.class);
+    public void create(User user) {
+        if (user == null) {
+            throw new NullReferenceEntityException(User.class);
         }
-        if (usersRepository.existsByEmail(users.getEmail())) {
+        if (userRepository.existsByEmail(user.getEmail())) {
             throw new AlreadySignedUserException();
         }
-        Users newUsers = users
-                .encryptPassword(passwordEncoder.encode(users.getPassword()))
+        User newUser = user
+                .encryptPassword(passwordEncoder.encode(user.getPassword()))
                 .newFaceUser();
-        usersRepository.save(newUsers);
+        userRepository.save(newUser);
     }
 
     @Transactional
-    public void updateNickName(Long userId, Users users) {
+    public void updateNickName(Long userId, User users) {
         if (users == null) {
-            throw new NullReferenceEntityException(Users.class);
+            throw new NullReferenceEntityException(User.class);
         }
-        Users user = usersRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         user.setNickname(Optional.ofNullable(users.getNickname()).orElse(user.getNickname()));
         applicationEventPublisher.publishEvent(new UserUpdateEvent(this, user));
     }
 
     @Transactional
     public void delete(Long userId) {
-        Users user = usersRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         user.setState(UsersStateType.DELETED);
     }
 }

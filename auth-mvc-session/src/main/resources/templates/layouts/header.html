@@ -27,7 +27,7 @@
         </nav>
         <div class="navbar-form navbar-right" sec:authorize="isAuthenticated()">
             <form th:action="@{/logout}" method="post">
-                안녕하세요, <a th:href="@{/users/info/me}">
+                안녕하세요, <a th:href="@{/user/info/me}">
                 <span sec:authentication="principal.nickname">닉네임</span></a>님!
                 <button type="submit" class="btn btn-default">로그아웃</button>
             </form>

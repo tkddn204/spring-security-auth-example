@@ -1,8 +1,8 @@
 package com.rightpair.controller;
 
-import com.rightpair.entity.Users;
+import com.rightpair.entity.User;
 import com.rightpair.security.AppUserDetails;
-import com.rightpair.service.UsersService;
+import com.rightpair.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class UsersController {
-    private final UsersService usersService;
+public class UserController {
+    private final UserService userService;
 
     @GetMapping("/login")
     public String loginPage() {
@@ -24,47 +24,47 @@ public class UsersController {
 
     @GetMapping("/signup")
     public String registerPage(Model model) {
-        model.addAttribute("user", Users.empty());
+        model.addAttribute("user", User.empty());
         return "signup-form";
     }
 
     @GetMapping("/info/me")
     public String infoPage(@AuthenticationPrincipal AppUserDetails appUserDetails, Model model) {
-        Users users = usersService.getById(appUserDetails.getId());
-        model.addAttribute("user", users);
+        User user = userService.getById(appUserDetails.getId());
+        model.addAttribute("user", user);
         return "user-info";
     }
 
     @GetMapping("/update")
     public String updatePage(@AuthenticationPrincipal AppUserDetails appUserDetails, Model model) {
-        Users users = usersService.getById(appUserDetails.getId());
-        model.addAttribute("user", users);
+        User user = userService.getById(appUserDetails.getId());
+        model.addAttribute("user", user);
         return "user-update";
     }
 
     @PostMapping("/signup")
-    public String signUp(@Valid @ModelAttribute("user")Users users, BindingResult result) {
+    public String signUp(@Valid @ModelAttribute("user") User user, BindingResult result) {
         if (result.hasErrors()) {
             return "redirect:/users/signup";
         }
-        usersService.create(users);
+        userService.create(user);
         return "redirect:/users/login";
     }
 
     @PostMapping("/info/me/delete")
     public String delete(@AuthenticationPrincipal AppUserDetails appUserDetails) {
-        usersService.delete(appUserDetails.getId());
+        userService.delete(appUserDetails.getId());
         return "redirect:/users/logout";
     }
 
     @PostMapping("/update")
     public String update(
             @AuthenticationPrincipal AppUserDetails appUserDetails,
-            @Valid @ModelAttribute("user")Users users, BindingResult result) {
+            @Valid @ModelAttribute("user") User user, BindingResult result) {
         if (result.hasErrors()) {
             return "redirect:/users/update";
         }
-        usersService.updateNickName(appUserDetails.getId(), users);
+        userService.updateNickName(appUserDetails.getId(), user);
         return "redirect:/users/info/me";
     }
 }

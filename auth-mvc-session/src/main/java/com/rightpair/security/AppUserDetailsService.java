@@ -1,7 +1,7 @@
 package com.rightpair.security;
 
-import com.rightpair.entity.Users;
-import com.rightpair.repository.UsersRepository;
+import com.rightpair.entity.User;
+import com.rightpair.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AppUserDetailsService implements UserDetailsService {
-    private final UsersRepository usersRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users users = usersRepository.findUsersByEmail(username)
+        User user = userRepository.findUsersByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format("User not Found: %s", username)));
-        return new AppUserDetails(users);
+        return new AppUserDetails(user);
     }
 }

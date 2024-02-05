@@ -10,7 +10,7 @@
             회원가입
         </div>
         <div class="mt-10">
-            <form th:action="@{/users/signup}" th:object="${user}" method="post">
+            <form th:action="@{/user/signup}" th:object="${user}" method="post">
                 <div class="flex flex-col mb-5">
                     <label for="email" class="mb-1 text-xs tracking-wide text-gray-600">이메일:</label>
                     <div class="relative">
@@ -59,7 +59,7 @@
     </div>
     <div class="flex justify-center items-center mt-6">
         <div href="#" target="_blank" class=" inline-flex items-center text-gray-700 font-medium text-xs text-center ">
-            <span class="ml-2">이미 계정이 있나요? <a href="@{/users/login}" class="text-xs ml-2 text-blue-500 font-semibold">로그인하러 가기</a></span>
+            <span class="ml-2">이미 계정이 있나요? <a href="@{/user/login}" class="text-xs ml-2 text-blue-500 font-semibold">로그인하러 가기</a></span>
         </div>
     </div>
 </div>

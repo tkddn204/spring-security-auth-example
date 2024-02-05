@@ -13,7 +13,7 @@
             회원 정보를 입력해주세용
         </div>
         <div class="mt-10">
-            <form id="login-form" th:action="@{/users/login}" method="post">
+            <form id="login-form" th:action="@{/user/login}" method="post">
                 <span class="flex items-center font-medium tracking-wide text-red-500 text-l m-2"
                         th:if="${param.error}">올바르지 않은 사용자 정보입니다.</span>
                 <span class="flex items-center font-medium tracking-wide text-blue-500 text-l m-2"
@@ -53,7 +53,7 @@
     </div>
     <div class="flex justify-center items-center mt-6">
         <div class=" inline-flex items-center text-gray-700 font-medium text-xs text-center ">
-            <span class="ml-2">아직 회원이 아니신가요? <a href="/users/signup" class="text-xs ml-2 text-blue-500 font-semibold">회원가입 하러 가기</a></span>
+            <span class="ml-2">아직 회원이 아니신가요? <a href="/user/signup" class="text-xs ml-2 text-blue-500 font-semibold">회원가입 하러 가기</a></span>
         </div>
     </div>
 </div>

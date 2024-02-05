@@ -1,12 +1,12 @@
 package com.rightpair.service;
 
-import com.rightpair.entity.Users;
+import com.rightpair.entity.User;
 import com.rightpair.entity.types.UsersStateType;
 import com.rightpair.event.UserUpdateEvent;
 import com.rightpair.exception.AlreadySignedUserException;
 import com.rightpair.exception.NullReferenceEntityException;
 import com.rightpair.exception.UserNotFoundException;
-import com.rightpair.repository.UsersRepository;
+import com.rightpair.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -27,13 +27,13 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class UsersServiceTest {
+class UserServiceTest {
     private static final String FAKE_ENCRYPTED_PASSWORD = "fake-encrypted-password";
     @InjectMocks
-    private UsersService usersService;
+    private UserService userService;
 
     @Mock
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -51,14 +51,14 @@ class UsersServiceTest {
         public void _success() {
             // given
             Long userId = 1L;
-            Users users = new Users("test", "test@test.com", "test-password");
-            given(usersRepository.findById(userId)).willReturn(Optional.of(users));
+            User user = new User("test", "test@test.com", "test-password");
+            given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
             // when
-            usersService.getById(userId);
+            userService.getById(userId);
 
             // then
-            verify(usersRepository).findById(anyLong());
+            verify(userRepository).findById(anyLong());
         }
 
         @DisplayName("userId에 해당하는 사용자를 찾지 못했을 경우 사용자를 조회할 수 없다.")
@@ -71,7 +71,7 @@ class UsersServiceTest {
             // then
             assertThrows(UserNotFoundException.class, () -> {
                 // when
-                usersService.getById(userId);
+                userService.getById(userId);
             });
         }
     }
@@ -84,42 +84,42 @@ class UsersServiceTest {
         @Test
         public void _success() {
             // given
-            Users users = new Users("test", "test@test.com", "test-password");
+            User user = new User("test", "test@test.com", "test-password");
             given(passwordEncoder.encode(anyString())).willReturn(FAKE_ENCRYPTED_PASSWORD);
-            given(usersRepository.existsByEmail(anyString())).willReturn(false);
-            given(usersRepository.save(any(Users.class))).willReturn(users);
+            given(userRepository.existsByEmail(anyString())).willReturn(false);
+            given(userRepository.save(any(User.class))).willReturn(user);
 
             // when
-            usersService.create(users);
+            userService.create(user);
 
             // then
-            verify(usersRepository).existsByEmail(anyString());
-            verify(usersRepository).save(any(Users.class));
+            verify(userRepository).existsByEmail(anyString());
+            verify(userRepository).save(any(User.class));
         }
 
         @DisplayName("Users 객체가 Null일 경우 사용자를 생성할 수 없다.")
         @Test
         public void usersIsNull_fail() {
             // given
-            Users users = null;
+            User user = null;
 
             // when
             // then
             assertThrows(NullReferenceEntityException.class,
-                    () -> usersService.create(users));
+                    () -> userService.create(user));
         }
 
         @DisplayName("이미 가입된 이메일로 사용자 생성을 시도하면 사용자를 생성할 수 없다.")
         @Test
         public void alreadySignedEmail_fail() {
             // given
-            Users users = new Users("test", "test@test.com", "test-password");
-            given(usersRepository.existsByEmail(anyString())).willReturn(true);
+            User user = new User("test", "test@test.com", "test-password");
+            given(userRepository.existsByEmail(anyString())).willReturn(true);
 
             // then
             assertThrows(AlreadySignedUserException.class, () -> {
                 // when
-                usersService.create(users);
+                userService.create(user);
             });
         }
     }
@@ -133,32 +133,32 @@ class UsersServiceTest {
         public void _success() {
             // given
             long userId = 1L;
-            Users users = new Users("testname", "test@test.com", "test-password");
-            Users updatedUsers = new Users("updatedtestname", "test@test.com", "test-password");
+            User user = new User("testname", "test@test.com", "test-password");
+            User updatedUser = new User("updatedtestname", "test@test.com", "test-password");
 
-            given(usersRepository.findById(anyLong())).willReturn(Optional.of(users));
+            given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
             // when
-            usersService.updateNickName(userId, updatedUsers);
+            userService.updateNickName(userId, updatedUser);
 
             // then
             ArgumentCaptor<UserUpdateEvent> argumentCaptor = ArgumentCaptor.forClass(UserUpdateEvent.class);
             verify(applicationEventPublisher).publishEvent(argumentCaptor.capture());
 
             UserUpdateEvent publishedEvent = argumentCaptor.getValue();
-            assertThat(publishedEvent.getUpdatedUser().getNickname()).isEqualTo(updatedUsers.getNickname());
+            assertThat(publishedEvent.getUpdatedUser().getNickname()).isEqualTo(updatedUser.getNickname());
         }
 
         @DisplayName("Users 객체가 Null일 경우 사용자 정보를 수정할 수 없다.")
         @Test
         public void usersIsNull_fail() {
             // given
-            Users updatedUsers = null;
+            User updatedUser = null;
 
             // when
             // then
             assertThrows(NullReferenceEntityException.class,
-                    () -> usersService.updateNickName(0L, updatedUsers));
+                    () -> userService.updateNickName(0L, updatedUser));
         }
 
 
@@ -166,12 +166,12 @@ class UsersServiceTest {
         @Test
         public void userNotFound_fail() {
             // given
-            Users updatedUsers = new Users("test", "test@test.com", "test-password");
+            User updatedUser = new User("test", "test@test.com", "test-password");
 
             // then
             assertThrows(UserNotFoundException.class, () -> {
                 // when
-                usersService.updateNickName(0L, updatedUsers);
+                userService.updateNickName(0L, updatedUser);
             });
         }
     }
@@ -185,15 +185,15 @@ class UsersServiceTest {
         public void _success() {
             // given
             long userId = 1L;
-            Users users = new Users("test", "test@test.com", "test-password");
-            given(usersRepository.findById(anyLong())).willReturn(Optional.of(users));
+            User user = new User("test", "test@test.com", "test-password");
+            given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
 
             // when
-            usersService.delete(userId);
+            userService.delete(userId);
 
             // then
-            verify(usersRepository).findById(anyLong());
-            assertThat(users.getState()).isEqualTo(UsersStateType.DELETED);
+            verify(userRepository).findById(anyLong());
+            assertThat(user.getState()).isEqualTo(UsersStateType.DELETED);
         }
 
         @DisplayName("userId에 해당하는 사용자를 찾지 못했을 경우 사용자를 조회할 수 없다.")
@@ -206,7 +206,7 @@ class UsersServiceTest {
             // then
             assertThrows(UserNotFoundException.class, () -> {
                 // when
-                usersService.delete(userId);
+                userService.delete(userId);
             });
         }
     }

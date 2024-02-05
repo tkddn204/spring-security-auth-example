@@ -1,6 +1,6 @@
 package com.rightpair.security;
 
-import com.rightpair.entity.Users;
+import com.rightpair.entity.User;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -14,11 +14,11 @@ public class WithMockAppUserSecurityContextFactory implements WithSecurityContex
     public SecurityContext createSecurityContext(WithMockAppUser annotation) {
         final SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
 
-        Users users = new Users(annotation.nickname(), annotation.username(), annotation.password());
-        users.setId(1000L);
-        AppUserDetails appUserDetails = new AppUserDetails(users);
+        User user = new User(annotation.nickname(), annotation.username(), annotation.password());
+        user.setId(1000L);
+        AppUserDetails appUserDetails = new AppUserDetails(user);
         final UsernamePasswordAuthenticationToken authenticationToken
-                = new UsernamePasswordAuthenticationToken(appUserDetails, users.getPassword(),
+                = new UsernamePasswordAuthenticationToken(appUserDetails, user.getPassword(),
                 List.of(new SimpleGrantedAuthority(annotation.role())));
 
         securityContext.setAuthentication(authenticationToken);

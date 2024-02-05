@@ -11,14 +11,14 @@
     </div>
     <div class="flex justify-center items-center mt-6">
         <div class="inline-flex items-center text-gray-700 font-medium text-xs text-center">
-            <a href="/users/update" class="text-xs ml-2 text-blue-500 font-semibold cursor-pointer">편집</a>
+            <a href="/user/update" class="text-xs ml-2 text-blue-500 font-semibold cursor-pointer">편집</a>
         </div>
         <div class="inline-flex items-center text-gray-700 font-medium text-xs text-center">
             <a onclick="confirm(`삭제하시겠습니까?`) ? document.getElementById(`delete-form`).submit() : undefined"
                class="text-xs ml-2 text-blue-500 font-semibold cursor-pointer">삭제</a>
         </div>
     </div>
-    <form hidden id="delete-form" method="post" action="/users/info/me/delete">
+    <form hidden id="delete-form" method="post" action="/user/info/me/delete">
     </form>
 </div>
 </body>

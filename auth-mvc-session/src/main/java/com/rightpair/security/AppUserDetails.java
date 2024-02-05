@@ -1,6 +1,6 @@
 package com.rightpair.security;
 
-import com.rightpair.entity.Users;
+import com.rightpair.entity.User;
 import com.rightpair.entity.types.UsersStateType;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +22,15 @@ public class AppUserDetails implements UserDetails {
     private final List<GrantedAuthority> authorities;
 
 
-    public AppUserDetails(Users users) {
-        this.id = users.getId();
-        this.nickname = users.getNickname();
-        this.username = users.getEmail();
-        this.password = users.getPassword();
-        this.enabled = users.getState().equals(UsersStateType.ACTIVE);
+    public AppUserDetails(User user) {
+        this.id = user.getId();
+        this.nickname = user.getNickname();
+        this.username = user.getEmail();
+        this.password = user.getPassword();
+        this.enabled = user.getState().equals(UsersStateType.ACTIVE);
         this.authorities = AuthorityUtils.createAuthorityList(
-                users.getUserRoles().stream()
-                        .map(usersRole -> usersRole.getRoles().getRolesType().getValue())
+                user.getUserRoles().stream()
+                        .map(usersRole -> usersRole.getRoles().getRoleType().getValue())
                         .toList());
     }
 

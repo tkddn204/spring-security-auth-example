@@ -1,6 +1,6 @@
 package com.rightpair.event;
 
-import com.rightpair.entity.Users;
+import com.rightpair.entity.User;
 import com.rightpair.security.AppUserDetails;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ class UserUpdateEventListenerTest {
     @Test
     void updateSecurityContextWhenUserUpdateEventIsPublished_success() {
         // given
-        Users updatedUser = new Users("updatedUser", "test@test.com", "test1234");
+        User updatedUser = new User("updatedUser", "test@test.com", "test1234");
         UserUpdateEvent event = new UserUpdateEvent(this, updatedUser);
 
         // when

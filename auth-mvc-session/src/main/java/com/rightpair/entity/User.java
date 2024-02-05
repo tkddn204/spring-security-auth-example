@@ -9,14 +9,15 @@ import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.rightpair.entity.types.RolesType.ASSOCIATE_USER;
+import static com.rightpair.entity.types.RoleType.ASSOCIATE_USER;
 
 @Entity
 @Getter
 @Setter
 @ToString
+@Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Users extends BaseEntity {
+public class User extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -38,31 +39,31 @@ public class Users extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private UsersStateType state = UsersStateType.ACTIVE;
 
-    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
     private final Set<UsersRole> userRoles = new HashSet<>();
 
-    public Users(String nickname, String email, String password) {
+    public User(String nickname, String email, String password) {
         this(nickname, email, password, new Roles(ASSOCIATE_USER));
     }
 
-    public Users(String nickname, String email, String password, Roles userRoles) {
+    public User(String nickname, String email, String password, Roles userRoles) {
         this.userRoles.add(new UsersRole(this, userRoles));
         this.nickname = nickname;
         this.email = email;
         this.password = password;
     }
 
-    public static Users empty() {
-        return new Users();
+    public static User empty() {
+        return new User();
     }
 
-    public Users encryptPassword(String encryptedPassword) {
+    public User encryptPassword(String encryptedPassword) {
         this.password = encryptedPassword;
         return this;
     }
 
-    public Users newFaceUser() {
+    public User newFaceUser() {
         this.userRoles.add(new UsersRole(this, new Roles(ASSOCIATE_USER)));
         return this;
     }
