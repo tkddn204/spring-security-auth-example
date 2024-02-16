@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: auth-jwt
+  config:
+    import: optional:file:.env[.properties]
+
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=MYSQL
+    username: sa
+    password:
+
+  jpa:
+    open-in-view: false
+    properties:
+      format_sql: true
+      dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: create
+
+service:
+  jwt:
+    secret-key: ${JWT_SECRET_KEY:NDM1YTQ1ZWJjNDBjMjI2N2ViMzdlNDE5NjY0ODA5MTJlNWJlYzVhZWRlZGE2M2E5NjhlNzdkNjA1ZjNhNWJlNA==}
+    access-expiration: ${JWT_ACCESS_EXPIRATION:36000000}
+    refresh-expiration: ${JWT_REFRESH_EXPIRATION:864000000}
+  oauth:
+    google:
+      redirect-uri: ${AUTH_GOOGLE_CLIENT_REDIRECT_URI}
+      client-id: ${AUTH_GOOGLE_CLIENT_ID}
+      client-secret: ${AUTH_GOOGLE_CLIENT_SECRET}
