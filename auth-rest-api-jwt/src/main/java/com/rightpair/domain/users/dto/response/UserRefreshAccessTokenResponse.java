@@ -1,6 +1,6 @@
 package com.rightpair.domain.users.dto.response;
 
-import com.rightpair.global.jwt.dto.JwtPair;
+import com.rightpair.infra.jwt.dto.JwtPair;
 
 public record UserRefreshAccessTokenResponse(
         String accessToken,

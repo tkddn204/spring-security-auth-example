@@ -7,7 +7,7 @@ import com.rightpair.domain.users.dto.request.UserRegisterRequest;
 import com.rightpair.domain.users.dto.response.UserLoginResponse;
 import com.rightpair.domain.users.dto.response.UserRefreshAccessTokenResponse;
 import com.rightpair.domain.users.service.UserService;
-import com.rightpair.global.security.AuthUserDetails;
+import com.rightpair.infra.security.AuthUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

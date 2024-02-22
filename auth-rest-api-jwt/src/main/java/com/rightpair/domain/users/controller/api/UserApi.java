@@ -5,7 +5,7 @@ import com.rightpair.domain.users.dto.request.UserAuthenticateRequest;
 import com.rightpair.domain.users.dto.request.UserRegisterRequest;
 import com.rightpair.domain.users.dto.response.UserLoginResponse;
 import com.rightpair.domain.users.dto.response.UserRefreshAccessTokenResponse;
-import com.rightpair.global.security.AuthUserDetails;
+import com.rightpair.infra.security.AuthUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
