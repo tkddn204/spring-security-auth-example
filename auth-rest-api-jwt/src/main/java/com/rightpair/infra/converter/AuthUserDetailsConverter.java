@@ -6,6 +6,7 @@ import com.rightpair.global.exception.ErrorCode;
 import com.rightpair.infra.security.AuthUserDetails;
 import com.rightpair.infra.security.AuthUserDetailsAdapter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +19,11 @@ public class AuthUserDetailsConverter implements AuthUserDetailsAdapter {
     public AuthUserDetails convertToAuthUserDetails(String email) {
         User user = userDetailsRepository.findUsersByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(ErrorCode.MEMBER_NOT_FOUND.getMessage()));
-        return new AuthUserDetails(user.getId(), user.getEmail(), user.isEnabled(), user.getAuthorities());
+        return new AuthUserDetails(
+                user.getId(),
+                user.getEmail(),
+                user.isEnabled(),
+                AuthorityUtils.createAuthorityList(user.getUserRoles().stream()
+                        .map(userRole -> userRole.getRole().getRoleType().getValue()).toList()));
     }
 }

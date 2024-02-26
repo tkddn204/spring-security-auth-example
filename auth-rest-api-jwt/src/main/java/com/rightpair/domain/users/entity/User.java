@@ -1,17 +1,13 @@
 package com.rightpair.domain.users.entity;
 
-import com.rightpair.domain.users.entity.types.RoleType;
 import com.rightpair.domain.users.entity.types.UserStateType;
 import com.rightpair.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -44,20 +40,6 @@ public class User extends BaseEntity {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
-    }
-
-    public static User empty() {
-        return new User();
-    }
-
-    public User newFaceUser() {
-        this.userRoles.add(new UserRole(this, new Role(RoleType.ASSOCIATE_USER)));
-        return this;
-    }
-
-    public List<GrantedAuthority> getAuthorities() {
-        return AuthorityUtils.createAuthorityList(this.userRoles.stream()
-                .map(userRole -> userRole.getRole().getRoleType().getValue()).toList());
     }
 
     public boolean isEnabled() {
