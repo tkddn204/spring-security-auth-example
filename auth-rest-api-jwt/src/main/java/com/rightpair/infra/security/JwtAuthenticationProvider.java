@@ -1,6 +1,5 @@
 package com.rightpair.infra.security;
 
-import com.rightpair.domain.users.entity.User;
 import com.rightpair.infra.jwt.dto.JwtPayload;
 import com.rightpair.infra.jwt.exception.auth.JwtInvalidAccessTokenException;
 import com.rightpair.infra.jwt.service.JwtService;
@@ -24,9 +23,9 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
             throw new JwtInvalidAccessTokenException();
         }
         JwtPayload jwtPayload = jwtService.verifyToken(accessToken);
-        User user = (User) authUserDetailsService.loadUserByUsername(jwtPayload.email());
-        AuthUserDetails authUserDetails =  AuthUserDetails.from(user);
-        return JwtAuthenticationToken.authenticated(authUserDetails, accessToken);
+        AuthUserDetails authUserDetails = (AuthUserDetails) authUserDetailsService.loadUserByUsername(jwtPayload.email());
+        return JwtAuthenticationToken.authenticated(
+                authUserDetails, accessToken);
     }
 
     @Override

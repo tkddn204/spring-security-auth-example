@@ -1,6 +1,5 @@
 package com.rightpair.infra.security;
 
-import com.rightpair.domain.users.entity.User;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -25,16 +24,6 @@ public class AuthUserDetails implements UserDetails {
         this.memberEmail = memberEmail;
         this.enabled = enabled;
         this.authorities = authorities;
-    }
-
-    public static AuthUserDetails from(User user) {
-        return new AuthUserDetails(
-                user.getId(),
-                user.getEmail(),
-                !user.isDeleted(),
-                user.getAuthorities().stream().map(grantedAuthority ->
-                        (GrantedAuthority) grantedAuthority).toList()
-        );
     }
 
     @Override
