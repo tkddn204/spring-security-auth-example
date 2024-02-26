@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
@@ -20,7 +19,8 @@ public class AuthUserDetails implements UserDetails {
     private final boolean enabled;
     private final List<GrantedAuthority> authorities;
 
-    public AuthUserDetails(Long memberId, String memberEmail, boolean enabled, List<GrantedAuthority> authorities) {
+    public AuthUserDetails(Long memberId, String memberEmail, boolean enabled,
+                           List<GrantedAuthority> authorities) {
         this.memberId = memberId;
         this.memberEmail = memberEmail;
         this.enabled = enabled;
@@ -28,14 +28,12 @@ public class AuthUserDetails implements UserDetails {
     }
 
     public static AuthUserDetails from(User user) {
-        List<String> roles = user.getUserRoles().stream()
-                .map(memberRole -> memberRole.getRole().getRoleType().getValue())
-                .toList();
         return new AuthUserDetails(
                 user.getId(),
                 user.getEmail(),
                 !user.isDeleted(),
-                AuthorityUtils.createAuthorityList(roles)
+                user.getAuthorities().stream().map(grantedAuthority ->
+                        (GrantedAuthority) grantedAuthority).toList()
         );
     }
 

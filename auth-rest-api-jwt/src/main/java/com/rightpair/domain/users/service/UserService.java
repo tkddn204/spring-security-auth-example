@@ -46,7 +46,7 @@ public class UserService {
     @Transactional
     public void register(UserRegisterRequest registerRequest) {
         validateMemberEmail(registerRequest.email());
-        Role role = roleRepository.findByRolesType(RoleType.ASSOCIATE_USER).orElseThrow(UserRoleNotFoundException::new);
+        Role role = roleRepository.findByRoleType(RoleType.ASSOCIATE_USER).orElseThrow(UserRoleNotFoundException::new);
         userRepository.save(
                 new User(registerRequest.email(),
                         passwordEncoder.encode(registerRequest.password()),

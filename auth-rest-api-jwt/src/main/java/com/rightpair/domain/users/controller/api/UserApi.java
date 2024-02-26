@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/member")
+@RequestMapping("/v1/users")
 @Tag(name="Auth", description = "사용자 인증 관련 API")
 public interface UserApi {
     @Operation(summary = "사용자 인증", description = "사용자 인증을 요청합니다. 성공시 JWT 토큰 페어를 응답합니다.")

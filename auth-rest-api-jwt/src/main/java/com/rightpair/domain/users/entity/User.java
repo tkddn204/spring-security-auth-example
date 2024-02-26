@@ -4,34 +4,33 @@ import com.rightpair.domain.users.entity.types.RoleType;
 import com.rightpair.domain.users.entity.types.UserStateType;
 import com.rightpair.global.common.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
-@ToString
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends BaseEntity {
+public class User extends BaseEntity implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotEmpty(message = "닉네임을 입력해야 합니다.")
     @Column(nullable = false)
     private String nickname;
 
-    @NotEmpty(message = "이메일을 입력해야 합니다.")
-    @Email
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
-    @ToString.Exclude
     private String password;
 
     @Column(nullable = false)
@@ -39,12 +38,7 @@ public class User extends BaseEntity {
     private final UserStateType state = UserStateType.ACTIVE;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @ToString.Exclude
     private final Set<UserRole> userRoles = new HashSet<>();
-
-    public User(String nickname, String email, String password) {
-        this(nickname, email, password, new Role(RoleType.ASSOCIATE_USER));
-    }
 
     public User(String nickname, String email, String password, Role userRole) {
         this.userRoles.add(new UserRole(this, userRole));
@@ -69,5 +63,36 @@ public class User extends BaseEntity {
 
     public boolean isDeleted() {
         return this.state.equals(UserStateType.DELETED);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return AuthorityUtils.createAuthorityList(this.userRoles.stream()
+                .map(userRole -> userRole.getRole().getRoleType().getValue()).toList());
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return !state.equals(UserStateType.SUSPENDED);
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !state.equals(UserStateType.LOCKED);
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return state.equals(UserStateType.ACTIVE);
     }
 }
