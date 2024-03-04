@@ -19,8 +19,25 @@ spring:
       ddl-auto: create
     open-in-view: false
 
+  mail:
+    host: ${SMTP_HOST:smtp.gmail.com}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 service:
   jwt:
     secret-key: ${JWT_SECRET_KEY:NDM1YTQ1ZWJjNDBjMjI2N2ViMzdlNDE5NjY0ODA5MTJlNWJlYzVhZWRlZGE2M2E5NjhlNzdkNjA1ZjNhNWJlNA==}
     access-expiration: ${JWT_ACCESS_EXPIRATION:36000000}
     refresh-expiration: ${JWT_REFRESH_EXPIRATION:864000000}
+  mail:
+    register:
+      sender: ${MAIL_REGISTER_CONFIRM_SENDER:noreply@test.com}
+      subject: ${MAIL_REGISTER_CONFIRM_SUBJECT}}
+      url: ${MAIL_REGISTER_CONFIRM_URL:"http://localhost:8080/v1/users/confirm/%s"}

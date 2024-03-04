@@ -6,6 +6,7 @@ import com.rightpair.domain.users.dto.request.UserAuthenticateRequest;
 import com.rightpair.domain.users.dto.request.UserRegisterRequest;
 import com.rightpair.domain.users.dto.response.UserLoginResponse;
 import com.rightpair.domain.users.dto.response.UserRefreshAccessTokenResponse;
+import com.rightpair.domain.users.dto.response.UserRefreshRegisterCodeResponse;
 import com.rightpair.domain.users.service.UserService;
 import com.rightpair.infra.security.AuthUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,9 +43,22 @@ public class UserController implements UserApi {
     }
 
     @Override
+    public ResponseEntity<Void> confirm(String confirmCode) {
+        userService.registerConfirm(confirmCode);
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
     public ResponseEntity<UserRefreshAccessTokenResponse> refreshAccessToken(@Valid @RequestBody RefreshAccessTokenRequest request) {
         return ResponseEntity.ok(
                 UserRefreshAccessTokenResponse.from(userService.refreshAccessToken(request.refreshToken()))
+        );
+    }
+
+    @Override
+    public ResponseEntity<UserRefreshRegisterCodeResponse> refreshRegisterConfirmCode(String email) {
+        return ResponseEntity.ok(
+                UserRefreshRegisterCodeResponse.from(userService.refreshRegisterConfirmCode(email))
         );
     }
 }

@@ -2,7 +2,6 @@ package com.rightpair.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -14,18 +13,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorMessage> handleApplicationException(BusinessException businessException) {
+        log.error(businessException.getMessage(), businessException);
         ErrorCode errorCode = businessException.getErrorCode();
         return ResponseEntity.status(errorCode.getHttpStatus())
                 .body(ErrorMessage.from(errorCode));
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorMessage> handleHttpMessageNotReadableException(HttpMessageNotReadableException httpMessageNotReadableException) {
-        ErrorCode errorCode = ErrorCode.INVALID_REQUEST_PARAM;
-        Throwable cause = httpMessageNotReadableException.getCause();
-        log.error(cause.getMessage(), cause);
-        return ResponseEntity.status(errorCode.getHttpStatus())
-                .body(ErrorMessage.from(errorCode, errorCode.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

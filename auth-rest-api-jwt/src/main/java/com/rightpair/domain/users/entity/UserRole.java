@@ -33,7 +33,7 @@ public class UserRole {
     @Embeddable
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    private static class UsersRoleId implements Serializable {
+    public static class UsersRoleId implements Serializable {
         private Long usersId;
         private Long rolesId;
     }

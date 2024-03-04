@@ -35,14 +35,34 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<UserRole> userRoles = new HashSet<>();
 
-    public User(String nickname, String email, String password, Role userRole) {
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private UserConfirm userConfirm;
+
+    private User(String nickname, String email, String password, Role userRole) {
         this.userRoles.add(new UserRole(this, userRole));
         this.nickname = nickname;
         this.email = email;
         this.password = password;
     }
 
+    private void addUserConfirm(UserConfirm userConfirm) {
+        this.userConfirm = userConfirm;
+    }
+
+    public void updateUserConfirm() {
+        this.userConfirm.refreshCode();
+    }
+
+    public static User from(String name, String email, String password, Role role) {
+        User user = new User(name, email, password, role);
+        user.addUserConfirm(UserConfirm.from(user));
+        return user;
+    }
+
     public boolean isEnabled() {
         return state.equals(UserStateType.ACTIVE);
+    }
+
+    public void confirmRegister() {
     }
 }
