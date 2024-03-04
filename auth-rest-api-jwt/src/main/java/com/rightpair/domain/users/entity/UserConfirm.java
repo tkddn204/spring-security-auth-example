@@ -1,10 +1,7 @@
 package com.rightpair.domain.users.entity;
 
 import com.rightpair.domain.users.entity.types.ConfirmStateType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +15,9 @@ import java.time.LocalDateTime;
 public class UserConfirm {
 
     @Id
+    private Long id;
+
+    @MapsId
     @OneToOne
     @PrimaryKeyJoinColumn
     private User user;

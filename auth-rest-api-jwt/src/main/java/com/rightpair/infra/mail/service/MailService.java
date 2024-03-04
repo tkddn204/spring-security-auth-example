@@ -28,7 +28,7 @@ public class MailService {
     @Value("${service.mail.register.sender}")
     private String registerConfirmMailSender;
 
-    @Value("${service.mail.register.sender}")
+    @Value("${service.mail.register.url}")
     private String registerConfirmMailUrl;
 
     public void sendRegisterConfirmMail(String email, String name, String code) {
