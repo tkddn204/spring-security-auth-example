@@ -17,7 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
-@ExtendWith({SpringExtension.class})
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 public abstract class IntegrationTest {

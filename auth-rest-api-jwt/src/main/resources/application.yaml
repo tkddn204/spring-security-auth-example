@@ -12,8 +12,6 @@ spring:
 
   jpa:
     properties:
-      format_sql: true
-      show_sql: true
       dialect: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create
@@ -28,6 +26,7 @@ spring:
       mail:
         smtp:
           auth: true
+          timeout: 30000
           starttls:
             enable: true
 
@@ -36,8 +35,3 @@ service:
     secret-key: ${JWT_SECRET_KEY:NDM1YTQ1ZWJjNDBjMjI2N2ViMzdlNDE5NjY0ODA5MTJlNWJlYzVhZWRlZGE2M2E5NjhlNzdkNjA1ZjNhNWJlNA==}
     access-expiration: ${JWT_ACCESS_EXPIRATION:36000000}
     refresh-expiration: ${JWT_REFRESH_EXPIRATION:864000000}
-  mail:
-    register:
-      sender: ${MAIL_REGISTER_CONFIRM_SENDER:noreply@test.com}
-      subject: ${MAIL_REGISTER_CONFIRM_SUBJECT}}
-      url: ${MAIL_REGISTER_CONFIRM_URL:"http://localhost:8080/v1/users/confirm/%s"}

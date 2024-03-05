@@ -45,24 +45,15 @@ public class User extends BaseEntity {
         this.password = password;
     }
 
-    private void addUserConfirm(UserConfirm userConfirm) {
-        this.userConfirm = userConfirm;
-    }
-
-    public void updateUserConfirm() {
-        this.userConfirm.refreshCode();
-    }
-
     public static User from(String name, String email, String password, Role role) {
-        User user = new User(name, email, password, role);
-        user.addUserConfirm(UserConfirm.from(user));
-        return user;
+        return new User(name, email, password, role);
+    }
+
+    public void addUserConfirm(UserConfirm userConfirm) {
+        this.userConfirm = userConfirm;
     }
 
     public boolean isEnabled() {
         return state.equals(UserStateType.ACTIVE);
-    }
-
-    public void confirmRegister() {
     }
 }

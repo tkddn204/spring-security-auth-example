@@ -57,11 +57,12 @@ public class UserService {
                         registerRequest.email(),
                         passwordEncoder.encode(registerRequest.password()),
                         role));
+        UserConfirm userConfirm = userConfirmRepository.save(UserConfirm.from(user));
 
         mailService.sendRegisterConfirmMail(
                 registerRequest.email(),
                 registerRequest.name(),
-                user.getUserConfirm().getCode()
+                userConfirm.getCode()
         );
     }
 

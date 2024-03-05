@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class UserConfirm {
 
     @Id
+    @Column(name = "user_id")
     private Long id;
 
     @MapsId
